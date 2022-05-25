@@ -1,20 +1,46 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { angleToRadians } from '../../utils/angles';
 import * as THREE from "three";
+import gsap from 'gsap';
 
 export default function Three() {
 
 	const orbitControlsRef = useRef(null)
-	useFrame((state) => {
-		if (!!orbitControlsRef.current) {
-			const { x, y } = state.mouse;
-			orbitControlsRef.current.setAzimuthalAngle(-x * angleToRadians(90));
-			orbitControlsRef.current.setPolarAngle((y + 0.9) * angleToRadians(60));
-			orbitControlsRef.current.update();
+
+	// Code to move camera according to mouse
+	// useFrame((state) => {
+	// 	if (!!orbitControlsRef.current) {
+	// 		const { x, y } = state.mouse;
+	// 		orbitControlsRef.current.setAzimuthalAngle(-x * angleToRadians(90));
+	// 		orbitControlsRef.current.setPolarAngle((y + 0.9) * angleToRadians(60));
+	// 		orbitControlsRef.current.update();
+	// 	}
+	// });
+
+	// Animation
+	const ballRef = useRef();
+	useEffect(() => {
+		if(!!ballRef.current) {
+
+			// Timeline
+			const timeline = gsap.timeline();
+
+			// x axis movement
+			timeline.from(ballRef.current.position, {
+				x: -2,			
+				duration: 1.5,				
+			});
+
+			// y axis movement
+			timeline.from(ballRef.current.position, {
+				y: 2.5,			
+				duration: 1.2,
+				ease: "bounce.out"
+			}, "<");
 		}
-	});
+	}, [])
 
 	return (
 		<>
@@ -28,7 +54,7 @@ export default function Three() {
 			/>
 
 			{/* Ball */}
-			<mesh position={[0, 0.5, 0]} castShadow>
+			<mesh position={[0, 0.5, 0]} castShadow ref={ballRef}>
 				<sphereGeometry args={[0.5, 32, 32]} />
 				<meshStandardMaterial color="#ffffff" metalness={0.5} roughness={0.3}/>
 			</mesh>
