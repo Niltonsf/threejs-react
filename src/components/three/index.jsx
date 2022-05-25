@@ -1,11 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import { Environment, OrbitControls, PerspectiveCamera, useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { angleToRadians } from '../../utils/angles';
 import * as THREE from "three";
 import gsap from 'gsap';
+import Car from '../car';
 
 export default function Three() {
+	
+	// Using Textures
+	//const colorMapTexture = useTexture();
 
 	const orbitControlsRef = useRef(null)
 
@@ -59,6 +63,9 @@ export default function Three() {
 				<meshStandardMaterial color="#ffffff" metalness={0.5} roughness={0.3}/>
 			</mesh>
 
+			{/* Car */}			
+			<Car />
+			
 			{/* Floor */}
 			<mesh rotation={[-(angleToRadians(90)), 0, 0]} receiveShadow>
 				<planeGeometry args={[20, 20]} />
